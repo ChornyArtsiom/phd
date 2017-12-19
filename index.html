@@ -45,6 +45,10 @@
         }
     }
 
+    .block {
+    	margin-bottom: 25px;
+    }
+
     @keyframes color_change {
         0% {
             border-color: blue;
@@ -65,8 +69,9 @@
     </section>
     <div id="app">
         <input type="text" v-model="search">
-        <div v-for="post in filteredList">
-            {{ post.answer }}
+        <div v-for="post in filteredList" class="block">
+					<div>Question: {{ post.category.question }}</div>
+					<div>Answer: {{ post.category.answer }}</div>
         </div>
     </div>
     <footer>
@@ -86,7 +91,7 @@
             filteredList() {
                 return this.tips.filter(post => {
                     if (this.search != '')
-                        return post.answer.toLowerCase().includes(this.search.toLowerCase())
+                        return post.code.toLowerCase().includes(this.search.toLowerCase())
                 })
             }
         }
