@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>PhD. Library</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.9/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
     input {
         /*border-radius: 5px;*/
@@ -58,39 +60,39 @@
 <body>
     <header>
     </header>
-    <section v-if="true">
+    <section>
         <p>Введите первые буквы трёх первых слов:</p>
-        <input class="input__focused" type="text" value="" placeholder="— — —" title="1th letter" maxlength="3" v-focus="true">
     </section>
     <div id="app">
-        {{ json.message }}
+        <input type="text" v-model="search">
+        <div v-for="post in filteredList">
+            {{ post.answer }}
+        </div>
     </div>
     <footer>
     </footer>
     <script>
-    // Vue.http.headers.common['Access-Control-Allow-Origin'] = '*';
-    // Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Content-Type,Authorization';
-    // Vue.http.headers.common['Access-Control-Allow-Methods'] = 'GET';
-    new Vue({
+    var vm = new Vue({
         el: '#app',
         data: {
-            json: {}
+            search: '',
+            tips: []
         },
         created: function() {
-            fetch("data.json", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "text/plain"
-                    }
+            axios.get("https://raw.githubusercontent.com/ChornyArtsiom/phd/dev/data.json")
+                .then(response => { this.tips = response.data })
+        },
+        computed: {
+            filteredList() {
+                return this.tips.filter(post => {
+                    if (this.search != '')
+                        return post.answer.toLowerCase().includes(this.search.toLowerCase())
                 })
-                .then(r => r.json())
-                .then(json => {
-                    this.json = json;
-                });
+            }
         }
-    });
 
-    // console.log(app);
+    });
+    // console.log(vm);
     </script>
 </body>
 
