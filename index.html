@@ -17,7 +17,7 @@
         font-size: 2em;
         /*width: 50%;*/
         margin: 0px 50px;
-        letter-spacing: 2rem;
+        letter-spacing: 1rem;
 
         animation-name: color_change;
         animation-duration: 1s;
@@ -25,6 +25,7 @@
         animation-direction: alternate;
 
         animation: color_change 1s infinite alternate;
+        outline: none;
     }
 
     section {
@@ -68,7 +69,7 @@
         <p>Введите первые буквы трёх первых слов:</p>
     </section>
     <div id="app">
-        <input type="text" v-model="search">
+        <input type="text" v-model="search" class="input__focused">
         <div v-for="post in filteredList" class="block">
 					<div>Question: {{ post.category.question }}</div>
 					<div>Answer: {{ post.category.answer }}</div>
