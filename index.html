@@ -47,7 +47,7 @@
     }
 
     .block {
-    	margin-bottom: 25px;
+        margin-bottom: 25px;
     }
 
     @keyframes color_change {
@@ -69,11 +69,33 @@
         <p>Введите первые буквы трёх первых слов:</p>
     </section>
     <div id="app">
+        <!-- <input type="text" v-model="categoryName"> -->
+        <ul>
+            <li v-for="item in categoryList">
+            		<a href="#" @click="setCategory(item)">{{ item }}</a>                
+            </li>
+        </ul>
+
         <input type="text" v-model="search" class="input__focused">
-        <div v-for="post in filteredList" class="block">
-					<div>Question: {{ post.category.question }}</div>
-					<div>Answer: {{ post.category.answer }}</div>
+      <!--   <div v-if="post.category == categoryName" v-for="post in filteredList">
+	        <div v-for="article in post.content" class="block">
+	            <p>Question: {{ article.question }}</p>
+	            <p>Answer: {{ article.answer }}</p>
+	            <div style="color:red">!!!: {{ article }}</div>
+	        </div>
+        </div> -->
+
+        <div v-for="post in filteredList">        
+	            <div v-bind="array" style="color:red;margin-bottom:20px">!!!: {{ post.content }}</div>
+	            <!-- <div style="color:green">+++: {{ searchEntry }}</div> -->
+
+	        </div>
+        
+
+        <div v-else>
+            <div style="color:blue">No category</div>
         </div>
+				
     </div>
     <footer>
     </footer>
@@ -81,20 +103,74 @@
     var vm = new Vue({
         el: '#app',
         data: {
+	        	item: '',
             search: '',
-            tips: []
+            categoryName: '',
+            categoryList: [
+                "first",
+                "second"
+            ],
+            tips: [],
+            array: []
         },
         created: function() {
             axios.get("https://raw.githubusercontent.com/ChornyArtsiom/phd/dev/data.json")
                 .then(response => { this.tips = response.data })
         },
         computed: {
-            filteredList() {
-                return this.tips.filter(post => {
-                    if (this.search != '')
-                        return post.code.toLowerCase().includes(this.search.toLowerCase())
-                })
+            //  filteredList() { return this.tips.filter(post => { 
+            //   	if (this.search != '') 
+            //   		return post.content[1].code.toLowerCase().includes(this.search.toLowerCase()) 
+            //  	}) 
+            // }
+
+
+            // filteredList() {
+            //     return this.tips.filter(post => {
+            //         var index = null;
+            //         if (this.search != '')
+            //             for (index in post.content) {
+            //               if(post.category == this.categoryName)
+            //                 return post.content[index].code.toLowerCase().includes(this.search.toLowerCase())
+            //             }
+            //     })
+            // }
+
+            filteredList: function() {
+            	// return this.tips.filter(post => {
+	            //  				// console.log(post.category.toLowerCase().includes(this.categoryName.toLowerCase()));
+                     
+             //         return post.category.toLowerCase().includes(this.categoryName.toLowerCase())
+	              
+             //  })
+
+             	var array = this.tips.filter(post => {
+             		return post.category.toLowerCase().includes(this.categoryName.toLowerCase())
+             	});
+
+             	var result = array.map(a => a.content);
+
+             	console.log(this.array);
+
+             	return result;
+
+             // return array;
+             	
+
             }
+
+
+    				
+
+              
+        },
+        methods: {
+        		setCategory(item) {
+        			this.categoryName = item;
+              // console.log(this.categoryName);
+
+
+        		}
         }
 
     });
