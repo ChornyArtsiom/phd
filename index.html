@@ -20,7 +20,7 @@
 
     input {
         border: none;
-        border-bottom: 3px solid #2196F3;
+        border-bottom: 3px solid #0275d8;
         color: #666;
         font-size: 2em;
         letter-spacing: 12px;
@@ -51,17 +51,17 @@
     }
 
     .returnList>a {
-        color: #666;
+        color: #222;
         padding: 10px 20px;
         text-decoration: none;
-        border: #888 solid 2px;
+        border: #222 solid 2px;
         font-weight: bold;
     }
 
     .returnList>a:hover {
-        background-color: #444;
+        background-color: #555;
         color: #fff;
-        border-color: #444;
+        border-color: #555;
     }
 
     .clearQuery {
@@ -91,7 +91,7 @@
         width: 100%;
     }
 
-    .container>h1 {
+    .container>.row>h1 {
         margin-bottom: 15px;
     }
 
@@ -113,19 +113,53 @@
     .categories>ul>li>a {
         display: block;
         padding: 20px;
-        background-color: #253138;
+        background-color: #025aa5;
         color: #fff;
         font-size: 2em;
         text-decoration: none;
         text-transform: uppercase;
     }
+    .cart {
+    	margin: 50px 0;
+    	padding: 0;
+    }
+    .cart {
+    	font-size: 1.3em;  	
+    	letter-spacing: 1.5px;
+
+    }
+    .question {
+    	padding: 15px 20px;
+    	background-color: #0275d8;
+    	color: #fff;
+    	border-radius: 20px 20px 0 0;
+    }
+    .answer {
+    	padding: 15px 20px;
+   /* 	background-color: #008133;
+    	    background-color: #025aa5;
+    	color: #fff;*/
+    	border: solid 2px #0275d8;    	
+    	border-radius: 0 0 20px 20px;
+    	border-top: none;
+    }
+    .answer {
+    	color: #111;
+    	letter-spacing: 1.3px;
+    	line-height: 2em;
+    }
+    .notFound, .readyQuery {
+    	font-size: 2em;
+    }
+
+
     </style>
 </head>
 
 <body>
     <header>
     </header>
-    <div id="app" class="container">
+    <div id="app" class="container">    
         <h1>Кто ищет, тот всегда найдет</h1>
         <section class="category__section" v-if="categoryName==''">
             <h3>Выберите категорию:</h3>
@@ -138,16 +172,22 @@
             </div>
         </section>
         <section class="content" v-else>
-            <p class="returnList"><a href="#" @click="clearCategory()">&#8592;&nbsp;&nbsp;&nbsp;Выбрать категорию</a></p>
+            <p class="returnList"><a href="#" @click="clearCategory();clearQuery()">&#8592;&nbsp;&nbsp;&nbsp;Выбрать категорию</a></p>
             <p>Введите первые буквы вопроса:</p>
             <input ref="search" type="text" v-model="search" placeholder="- - -">
             <p class="clearQuery"><a href="#" @click="clearQuery()">Ввести заново</a></p>
-            <div v-for="post in filteredList">
-                <div style="color:red;margin:20px 0">Вопрос: {{ post.question }}</div>
-                <div style="color:green">Ответ: {{ post.answer }}</div>
+            <div v-if="search != ''" v-for="post in filteredList" class="cart">
+                <div class="question"><strong>Вопрос:</strong><br /> {{ post.question }}</div>
+                <div class="answer"><strong>Ответ:</strong><br /> {{ post.answer }}</div>
+            </div>
+            <div  class="readyQuery" v-if="search == ''">
+								Запрос ещё не введён
+            </div>
+            <div  class="notFound" v-else>
+								Ничего не найдено
             </div>
         </section>
-    </div>
+        </div>
     <footer>
     </footer>
     <script>
