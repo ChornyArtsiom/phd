@@ -7,57 +7,117 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.9/vue.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Karla:400,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+    html,
+    body {
+        font-family: 'Karla', sans-serif;
+        font-size: 14px;
+    }
+
     input {
-        /*border-radius: 5px;*/
-        padding: 20px 0px 10px 20px;
         border: none;
-        border-bottom: 3px solid #09f;
+        border-bottom: 3px solid #2196F3;
         color: #666;
         font-size: 2em;
-        /*width: 50%;*/
-        margin: 0px 50px;
-        letter-spacing: 1rem;
-
-        animation-name: color_change;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-
-        animation: color_change 1s infinite alternate;
+        letter-spacing: 12px;
         outline: none;
+        padding-left: 15px;
+        width: 100%;
+        max-width: 320px;
     }
 
-    section {
-        text-align: center;
+    h1 {
+        font-weight: bold;
     }
 
-    section>p:nth-child(1) {
-        text-align: left;
+    h3 {
+        color: #F44336;
     }
 
-    .input__focused {
-        color: transparent;
-        display: inline-block;
-        text-shadow: 0 0 0 #111;
+    header {
+        margin-top: 30px;
+    }
 
-        &:focus {
-            outline: none;
-        }
+    .content {
+        margin-top: 20px;
+    }
+
+    .returnList {
+        margin: 40px 0;
+    }
+
+    .returnList>a {
+        color: #666;
+        padding: 10px 20px;
+        text-decoration: none;
+        border: #888 solid 2px;
+        font-weight: bold;
+    }
+
+    .returnList>a:hover {
+        background-color: #444;
+        color: #fff;
+        border-color: #444;
+    }
+
+    .clearQuery {
+        margin: 40px 0;
+    }
+
+    .clearQuery>a {
+        color: #da1214;
+        border: #da1214 solid 2px;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .clearQuery>a:hover {
+        background-color: #f52819;
+        border-color: #f52819;
+        color: #fff;
+
     }
 
     .block {
         margin-bottom: 25px;
     }
 
-    @keyframes color_change {
-        0% {
-            border-color: blue;
-        }
+    .categories {
+        width: 100%;
+    }
 
-        100% {
-            border-color: red;
-        }
+    .container>h1 {
+        margin-bottom: 15px;
+    }
+
+    .category__section>h3 {
+        margin: 15px 0;
+    }
+
+    .categories>ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .categories>ul>li {
+        padding: 10px 0;
+        margin: 0;
+    }
+
+    .categories>ul>li>a {
+        display: block;
+        padding: 20px;
+        background-color: #253138;
+        color: #fff;
+        font-size: 2em;
+        text-decoration: none;
+        text-transform: uppercase;
     }
     </style>
 </head>
@@ -65,37 +125,28 @@
 <body>
     <header>
     </header>
-    <section>
-        <p>Введите первые буквы трёх первых слов:</p>
-    </section>
-    <div id="app">
-        <!-- <input type="text" v-model="categoryName"> -->
-        <ul>
-            <li v-for="item in categoryList">
-            		<a href="#" @click="setCategory(item)">{{ item }}</a>                
-            </li>
-        </ul>
-
-        <input type="text" v-model="search" class="input__focused">
-      <!--   <div v-if="post.category == categoryName" v-for="post in filteredList">
-	        <div v-for="article in post.content" class="block">
-	            <p>Question: {{ article.question }}</p>
-	            <p>Answer: {{ article.answer }}</p>
-	            <div style="color:red">!!!: {{ article }}</div>
-	        </div>
-        </div> -->
-
-        <div v-for="post in filteredList">        
-	            <div v-bind="array" style="color:red;margin-bottom:20px">!!!: {{ post.content }}</div>
-	            <!-- <div style="color:green">+++: {{ searchEntry }}</div> -->
-
-	        </div>
-        
-
-        <div v-else>
-            <div style="color:blue">No category</div>
-        </div>
-				
+    <div id="app" class="container">
+        <h1>Кто ищет, тот всегда найдет</h1>
+        <section class="category__section" v-if="categoryName==''">
+            <h3>Выберите категорию:</h3>
+            <div class="categories">
+                <ul>
+                    <li v-for="item in setCategoryList">
+                        <a href="#" @click="setCategory(item)">{{ item }}</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="content" v-else>
+            <p class="returnList"><a href="#" @click="clearCategory()">&#8592;&nbsp;&nbsp;&nbsp;Выбрать категорию</a></p>
+            <p>Введите первые буквы вопроса:</p>
+            <input ref="search" type="text" v-model="search" placeholder="- - -">
+            <p class="clearQuery"><a href="#" @click="clearQuery()">Ввести заново</a></p>
+            <div v-for="post in filteredList">
+                <div style="color:red;margin:20px 0">Вопрос: {{ post.question }}</div>
+                <div style="color:green">Ответ: {{ post.answer }}</div>
+            </div>
+        </section>
     </div>
     <footer>
     </footer>
@@ -103,13 +154,10 @@
     var vm = new Vue({
         el: '#app',
         data: {
-	        	item: '',
+            item: '',
             search: '',
             categoryName: '',
-            categoryList: [
-                "first",
-                "second"
-            ],
+            categoryList: [],
             tips: [],
             array: []
         },
@@ -118,59 +166,30 @@
                 .then(response => { this.tips = response.data })
         },
         computed: {
-            //  filteredList() { return this.tips.filter(post => { 
-            //   	if (this.search != '') 
-            //   		return post.content[1].code.toLowerCase().includes(this.search.toLowerCase()) 
-            //  	}) 
-            // }
-
-
-            // filteredList() {
-            //     return this.tips.filter(post => {
-            //         var index = null;
-            //         if (this.search != '')
-            //             for (index in post.content) {
-            //               if(post.category == this.categoryName)
-            //                 return post.content[index].code.toLowerCase().includes(this.search.toLowerCase())
-            //             }
-            //     })
-            // }
-
             filteredList: function() {
-            	// return this.tips.filter(post => {
-	            //  				// console.log(post.category.toLowerCase().includes(this.categoryName.toLowerCase()));
-                     
-             //         return post.category.toLowerCase().includes(this.categoryName.toLowerCase())
-	              
-             //  })
-
-             	var array = this.tips.filter(post => {
-             		return post.category.toLowerCase().includes(this.categoryName.toLowerCase())
-             	});
-
-             	var result = array.map(a => a.content);
-
-             	console.log(this.array);
-
-             	return result;
-
-             // return array;
-             	
-
+                return this.tips.filter(post => {
+                    if (this.search != '' && post.category == this.categoryName)
+                        return post.code.toLowerCase().includes(this.search.toLowerCase())
+                })
+            },
+            setCategoryList: function() {
+                return ((Array.from(this.tips)).map(ex => ex.category)).filter((v, i, a) => a.indexOf(v) === i);
             }
 
-
-    				
-
-              
         },
         methods: {
-        		setCategory(item) {
-        			this.categoryName = item;
-              // console.log(this.categoryName);
+            setCategory(item) {
+                this.categoryName = item;
 
+            },
+            clearCategory() {
+                this.categoryName = '';
 
-        		}
+            },
+            clearQuery() {
+                this.$refs.search.focus();
+                this.search = '';
+            }
         }
 
     });
