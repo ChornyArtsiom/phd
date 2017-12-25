@@ -1,7 +1,14 @@
 var vm = new Vue({
     el: '#app',
     data: {
-        listItem: 'data.json',
+        uri: 'https://raw.githubusercontent.com/ChornyArtsiom/phd/dev/data/',
+        uriFormat: '.json',
+        listPath: 'list.json',
+        list: [],
+        listCodes: [],
+        listNames: [],
+        activeCatCode: '',
+
         error: '',
         item: '',
         code: '',
@@ -12,11 +19,8 @@ var vm = new Vue({
         array: []
     },
     created: function() {
-        axios.get("https://raw.githubusercontent.com/ChornyArtsiom/phd/dev/data/" + this.listItem)
-            .then(response => { this.tips = response.data })
-            .catch(function(error) {
-                 console.log(error+'');
-            });
+        axios.get(this.uri + this.listPath)
+            .then(response => { this.list = response.data });
     },
     computed: {
         filteredList: function() {
@@ -26,13 +30,21 @@ var vm = new Vue({
             })
         },
         setCategoryList: function() {
-            return ((Array.from(this.tips)).map(ex => ex.category)).filter((v, i, a) => a.indexOf(v) === i);
+            this.listCodes = (Array.from(this.list)).map(ex => ex.categoryCode).filter((v, i, a) => a.indexOf(v) === i);
+            this.listNames = (Array.from(this.list)).map(ex => ex.categoryName).filter((v, i, a) => a.indexOf(v) === i);
+            return this.listNames;
         }
 
     },
     methods: {
         setCategory(item) {
             this.categoryName = item;
+            this.activeCatCode = this.listCodes[this.listNames.indexOf(item)];
+
+            axios.get(this.uri + this.activeCatCode + this.uriFormat)
+            .then(response => { this.tips = response.data });
+
+            console.log(this.tips);
 
         },
         clearCategory() {
