@@ -7,158 +7,12 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.9/vue.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <!-- <link href="https://fonts.googleapis.com/css?family=Karla:400,700" rel="stylesheet"> -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=cyrillic" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-    html,
-    body {
-        font-family: 'Roboto', sans-serif;
-        font-size: 14px;
-    }
-
-    input {
-        border: none;
-        border-bottom: 3px solid #0275d8;
-        color: #666;
-        font-size: 2em;
-        letter-spacing: 12px;
-        outline: none;
-        padding-left: 15px;
-        width: 100%;
-        max-width: 320px;
-    }
-
-    h1 {
-        font-weight: bold;
-    }
-
-    h3 {
-        color: #f52819;
-    }
-
-    header {
-        margin-top: 30px;
-    }
-
-    .content {
-        margin-top: 20px;
-    }
-
-    .returnList {
-        margin: 40px 0;
-    }
-
-    .returnList>a {
-        color: #222;
-        padding: 10px 20px;
-        text-decoration: none;
-        border: #222 solid 2px;
-        font-weight: bold;
-    }
-
-    .returnList>a:hover {
-        background-color: #555;
-        color: #fff;
-        border-color: #555;
-    }
-
-    .clearQuery {
-        margin: 40px 0;
-    }
-
-    .clearQuery>a {
-        color: #da1214;
-        border: #da1214 solid 2px;
-        padding: 10px 20px;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    .clearQuery>a:hover {
-        background-color: #f52819;
-        border-color: #f52819;
-        color: #fff;
-    }
-
-    .block {
-        margin-bottom: 25px;
-    }
-
-    .categories {
-        width: 100%;
-    }
-
-    .container>.row>h1 {
-        margin-bottom: 15px;
-    }
-
-    .category__section>h3 {
-        margin: 15px 0;
-    }
-
-    .categories>ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .categories>ul>li {
-        padding: 10px 0;
-        margin: 0;
-    }
-
-    .categories>ul>li>a {
-        display: block;
-        padding: 20px;
-        background-color: #025aa5;
-        color: #fff;
-        font-size: 1.5em;
-        text-decoration: none;
-        text-transform: uppercase;
-    }
-
-    .cart {
-        margin: 20px 0 50px 0;
-        padding: 0;
-    }
-
-    .cart {
-        font-size: 1.3em;
-        letter-spacing: 1.5px;
-    }
-
-    .question {
-        padding: 15px 20px;
-        background-color: #0275d8;
-        color: #fff;
-        border-radius: 20px 20px 0 0;
-    }
-
-    .answer {
-        padding: 15px 20px;
-        /*  background-color: #008133;
-            background-color: #025aa5;
-        color: #fff;*/
-        border: solid 2px #0275d8;
-        border-radius: 0 0 20px 20px;
-        border-top: none;
-    }
-
-    .answer {
-        color: #111;
-        letter-spacing: 1.3px;
-        line-height: 2em;
-    }
-
-    .notFound,
-    .readyQuery {
-        font-size: 1.5em;
-        color: #888;
-    }
-    </style>
 </head>
 
 <body>
@@ -186,72 +40,19 @@
                 <div class="question"><strong>Вопрос:</strong>
                     <br /> {{ post.question }}</div>
                 <div class="answer"><strong>Ответ:</strong>
-                    <br /> {{ post.answer }}</div>                
+                    <br /> {{ post.answer }}</div>
             </div>
             <div class="readyQuery" v-if="search == ''">
                 Запрос ещё не введён.
-            </div>            
-      <!--       <div class="notFound" v-else>
+            </div>
+            <!--       <div class="notFound" v-else>
                 {{ filteredList | count }}
             </div> -->
         </section>
     </div>
     <footer>
     </footer>
-    <script>
-    var vm = new Vue({
-        el: '#app',
-        data: {
-            item: '',
-            code: '',
-            search: '',
-            categoryName: '',
-            categoryList: [],
-            tips: [],
-            array: []
-        },
-        created: function() {
-            axios.get("https://raw.githubusercontent.com/ChornyArtsiom/phd/dev/data.json")
-                .then(response => { this.tips = response.data })
-        },
-        computed: {
-            filteredList: function() {
-                return this.tips.filter(post => {
-                    if (this.search != '' && post.category == this.categoryName)
-                        return post.code.toLowerCase().includes(this.search.toLowerCase())
-                })
-            },
-            setCategoryList: function() {
-                return ((Array.from(this.tips)).map(ex => ex.category)).filter((v, i, a) => a.indexOf(v) === i);
-            }
-
-        },
-        methods: {
-            setCategory(item) {
-                this.categoryName = item;
-
-            },
-            clearCategory() {
-                this.categoryName = '';
-
-            },
-            clearQuery() {
-                this.$refs.search.focus();
-                this.search = '';
-            }
-        },
-        filters: {
-            count(ob) {
-                if (Object.keys(ob).length == 0)
-                    return ('Ничего не найдено.');
-                else
-                    return Object.keys(ob).length;
-            }
-        }
-
-    });
-    // console.log(vm);
-    </script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
