@@ -1,6 +1,8 @@
 var vm = new Vue({
     el: '#app',
     data: {
+        listItem: 'data.json',
+        error: '',
         item: '',
         code: '',
         search: '',
@@ -10,8 +12,11 @@ var vm = new Vue({
         array: []
     },
     created: function() {
-        axios.get("https://raw.githubusercontent.com/ChornyArtsiom/phd/dev/data.json")
+        axios.get("https://raw.githubusercontent.com/ChornyArtsiom/phd/dev/data/" + this.listItem)
             .then(response => { this.tips = response.data })
+            .catch(function(error) {
+                 console.log(error+'');
+            });
     },
     computed: {
         filteredList: function() {
