@@ -44,7 +44,7 @@ var vm = new Vue({
             axios.get(this.uri + this.activeCatCode + this.uriFormat)
             .then(response => { this.tips = response.data });
 
-            console.log(this.tips);
+            console.log((Array.from(this.tips)).map(ex => ex.categoryName));
 
         },
         clearCategory() {
