@@ -32,9 +32,9 @@
         </section>
         <section class="content" v-else>
             <p class="returnList"><a href="#" @click="clearCategory();clearQuery()">&#8592;&nbsp;&nbsp;&nbsp;Выбрать категорию</a></p>
-            <p class="notFound">Найдено совпадений: {{ filteredList | count }}</p>            
             <p>Введите первые буквы вопроса:</p>
             <input ref="search" type="text" v-model="search" placeholder=">----">
+            <p class="notFound">Найдено совпадений: {{ filteredList | count }}</p>
             <p class="clearQuery"><a href="#" @click="clearQuery()">Ввести заново</a></p>
             <div v-if="search != ''" v-for="post in filteredList" class="cart">
                 <div class="question"><strong>Вопрос:</strong>
